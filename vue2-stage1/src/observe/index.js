@@ -1,7 +1,18 @@
+let id = 0
 class Observe {
   constructor(data) {
-
-    this.walk(data)
+    this.id = ++id
+    Object.defineProperty(data, '_ob_', {
+      value: this,
+      enumerable: false,
+    })
+    if (Array.isArray(data)) {
+      // 监测数组
+      data.forEach(item => observe(item))
+    } else {
+      // 监测对象
+      this.walk(data)
+    }
   }
 
   // 循环对象，对属性进行劫持
