@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="/dist/umd/vue.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const vm = new Vue({
+        el: '#app',
+        data() {
+          return {
+            msg: 'hello world',
+            name: 'lj',
+            age: 20,
+            list: [1, 2, { a: 3 }],
+            info: { title: 'tttt', content: 'ccc' },
+          };
+        },
+      });
+      const _data = vm._data;
+      _data.list.push(3);
+      console.log(vm._data);
+    </script>
+  </body>
+</html>
