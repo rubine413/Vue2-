@@ -2,16 +2,29 @@
 import { isObject } from '../util/index';
 import { ArrayMethods } from './array';
 
+export function observe(data) {
+  const isObj = isObject(data);
+  if (!isObj) {
+    return;
+  }
+  return new Observer(data);
+}
+
 class Observer {
-  constructor(value) {
+  constructor(data) {
+    Object.defineProperty(data, '__ob__', {
+      enumerable: false,
+      configurable: false,
+      value: this,
+    });
     // 数据层次多需要递归解析
-    if (Array.isArray(value)) {
+    if (Array.isArray(data)) {
       // 劫持数组对象
-      value.__proto__ = ArrayMethods;
-      this.observeArray(value);
+      data.__proto__ = ArrayMethods;
+      this.observeArray(data);
     } else {
       // 劫持普通对象
-      this.walk(value);
+      this.walk(data);
     }
   }
 
@@ -26,7 +39,7 @@ class Observer {
 
   observeArray(data) {
     for (let index = 0; index < data.length; index++) {
-      const value = data[index];
+      observe(data[index]);
     }
   }
 }
@@ -49,12 +62,4 @@ function defineReactive(data, key, value) {
       value = newValue;
     },
   });
-}
-
-export function observe(data) {
-  const isObj = isObject(data);
-  if (!isObj) {
-    return;
-  }
-  return new Observer(data);
 }

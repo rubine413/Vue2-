@@ -12,14 +12,18 @@ methods.forEach(method => {
     switch (method) {
       case 'push':
       case 'unshift':
-        inserted = args
+        inserted = args;
         break;
       case 'splice':
-        inserted = args.slice(2)
+        inserted = args.slice(2);
       default:
         break;
     }
-    console.log(`数据劫持 ${method} -> ${inserted}`)
+    // console.log(`数据劫持 ${method} -> ${inserted}`)
+    const ob = this.__ob__;
+    if (inserted) {
+      ob.observeArray(inserted);
+    }
     return result;
   };
 });

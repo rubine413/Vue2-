@@ -1,4 +1,5 @@
 import { observe } from './observer/index';
+import { proxy } from './util/index';
 
 export function initState(vm) {
   const options = vm.$options;
@@ -19,6 +20,10 @@ function initData(vm) {
   let data = vm.$options.data;
   data = vm._data = typeof data == 'function' ? data.call(vm) : data;
   console.log('initData', data);
+  // 将data上的属性代理到vm实例上
+  for (const key in data) {
+    proxy(vm, '_data', key)
+  }
   // 数据劫持, 响应式原理
   observe(data);
 }
