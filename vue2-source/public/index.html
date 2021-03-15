@@ -8,7 +8,7 @@
     <script src="/dist/umd/vue.js"></script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">{{ msg }}</div>
     <script>
       const vm = new Vue({
         el: '#app',
@@ -22,8 +22,10 @@
           };
         },
       });
-      console.log(vm.msg);
+      console.log(vm._data);
       vm.list.push({ b: 4 });
+
+      console.log(vm)
     </script>
   </body>
 </html>
