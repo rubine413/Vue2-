@@ -1,3 +1,4 @@
+import { compileToFunction } from './compile/index';
 import { initState } from './state';
 
 export function initMixin(Vue) {
@@ -26,6 +27,9 @@ export function initMixin(Vue) {
       if (!template && el) {
         template = el.outerHTML;
         console.log('$mount -> ', template);
+      }
+      if (template) {
+        compileToFunction(template)
       }
     }
     vm.$el = el;

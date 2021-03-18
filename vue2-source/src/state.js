@@ -8,17 +8,29 @@ export function initState(vm) {
   if (options.props) {
     initProps(vm);
   }
+  if (options.methods) {
+    initMethods(vm);
+  }
 
   if (options.data) {
     initData(vm);
+  } else {
+    // 数据初始化为空对象
+  }
+  if (options.computed) {
+    initComputed(vm);
+  }
+  if (options.watch) {
+    initWatch(vm);
   }
 }
 
 function initProps(vm) {}
 function initMethods(vm) {}
+
 function initData(vm) {
   let data = vm.$options.data;
-  data = vm._data = typeof data == 'function' ? data.call(vm) : data;
+  data = vm._data = typeof data == 'function' ? data.call(vm) : data || {};
   console.log('initData', data);
   // 将data上的属性代理到vm实例上
   for (const key in data) {
@@ -27,5 +39,6 @@ function initData(vm) {
   // 数据劫持, 响应式原理
   observe(data);
 }
+
 function initComputed(vm) {}
 function initWatch(vm) {}

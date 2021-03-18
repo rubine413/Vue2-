@@ -1,18 +1,25 @@
+import { newArrayProto } from "./array"
+
 let id = 0
 class Observe {
   constructor(data) {
     this.id = ++id
-    Object.defineProperty(data, '_ob_', {
+    Object.defineProperty(data, '__ob__', {
       value: this,
       enumerable: false,
     })
     if (Array.isArray(data)) {
+      data._proto_ = newArrayProto
       // 监测数组
-      data.forEach(item => observe(item))
+      this.observeArray(data)
     } else {
       // 监测对象
       this.walk(data)
     }
+  }
+
+  observeArray(data) {
+    data.forEach(item => observe(item))
   }
 
   // 循环对象，对属性进行劫持
