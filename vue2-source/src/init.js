@@ -1,9 +1,10 @@
-import { compileToFunction } from './compile/index';
+import { compileToFunction } from './compiler/index';
+import { mountComponent } from './lifecycle';
 import { initState } from './state';
 
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
-    console.log(options);
+    console.log('初始化参数 -> ', options);
     // 数据劫持
     const vm = this;
     vm.$options = options;
@@ -17,21 +18,24 @@ export function initMixin(Vue) {
     }
   };
 
-  Vue.prototype.$mount = function (selector) {
-    console.log('$mount -> ', selector);
+  Vue.prototype.$mount = function (el) {
     const vm = this;
     const options = vm.$options;
-    const el = document.querySelector(selector);
+
+    el = document.querySelector(el);
     if (!options.render) {
+      // 获取模板
       let template = options.template;
       if (!template && el) {
         template = el.outerHTML;
-        console.log('$mount -> ', template);
-      }
-      if (template) {
-        compileToFunction(template)
+        console.log('挂载模板 -> ', template);
+        const render = compileToFunction(template);
+        options.render = render;
       }
     }
-    vm.$el = el;
+    console.log('render -> ', options.render);
+
+    // 挂载组件
+    mountComponent(vm, el);
   };
 }
