@@ -6,7 +6,7 @@ const methods = ['push', 'shift', 'unshift', 'splice', 'pop'];
 
 methods.forEach(method => {
   ArrayMethods[method] = function (...args) {
-    console.log(`数组劫持 ${method} -> ${args}`);
+    // console.log(`数组劫持 ${method} -> ${args}`);
     const result = oldArrayProtoMethods[method].apply(this, args);
     let inserted = null;
     switch (method) {

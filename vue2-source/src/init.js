@@ -28,12 +28,12 @@ export function initMixin(Vue) {
       let template = options.template;
       if (!template && el) {
         template = el.outerHTML;
-        console.log('挂载模板 -> ', template);
+        console.log('解析模板 -> ', template);
         const render = compileToFunction(template);
         options.render = render;
+        console.log('生成render函数 -> ', options.render);
       }
     }
-    console.log('render -> ', options.render);
 
     // 挂载组件
     mountComponent(vm, el);

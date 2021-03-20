@@ -50,11 +50,11 @@ function defineReactive(data, key, value) {
     configurable: true,
     enumerable: true,
     get() {
-      console.log(`访问对象属性 ${key} -> 值 ${value}`);
+      // console.log(`访问对象属性 ${key} -> ${value}`);
       return value;
     },
     set(newValue) {
-      console.log(`设置对象属性 ${key} -> 值 ${newValue}`);
+      // console.log(`设置对象属性 ${key} -> ${newValue}`);
       if (newValue === value) {
         return;
       }

@@ -13,57 +13,11 @@ const startTagClose = /^\s*(\/?)>/;
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`);
 const doctype = /^<!DOCTYPE [^>]+>/i;
 
-let root; // 根节点
-let currentParent; // 当前父节点
-let stack = [];
-
-function createASTElement(tag, attrs) {
-  return {
-    tag,
-    attrs,
-    children: [],
-    parent: null,
-    type: 1,
-  };
-}
-
-function start(tag, attrs) {
-  console.log(`开始标签 -> ${tag}`);
-  if (attrs && attrs.length > 0) {
-    console.log(`标签属性 -> ${JSON.stringify(attrs)}`);
-  }
-  const element = createASTElement(tag, attrs);
-  if (!root) {
-    root = element;
-  }
-  currentParent = element;
-  stack.push(element);
-}
-
-function chars(text) {
-  text = text.replace(/\s/g, '');
-  if (text) {
-    console.log(`获取文本 -> ${text}`);
-    currentParent.children.push({
-      type: 3,
-      text,
-    });
-  }
-}
-
-function end(tag) {
-  console.log(`结束标签 -> ${tag}`);
-  let element = stack.pop();
-  // 此处应该判断当前传入的标签与出栈的标签是相同的标签
-  currentParent = stack[stack.length - 1];
-  if (currentParent) {
-    element.parent = currentParent;
-    currentParent.children.push(element);
-  }
-}
-
 export function parseHTML(html) {
   let index = 0;
+  let root; // 根节点
+  let currentParent; // 当前父节点
+  let stack = [];
   // 循环匹配, 匹配完成后截掉匹配数据
   while (html) {
     let textEnd = html.indexOf('<');
@@ -138,6 +92,51 @@ export function parseHTML(html) {
     const tagName = match.tagName;
     const attrs = match.attrs;
     start(tagName, attrs);
+  }
+
+  function createASTElement(tag, attrs) {
+    return {
+      tag,
+      attrs,
+      children: [],
+      parent: null,
+      type: 1,
+    };
+  }
+
+  function start(tag, attrs) {
+    console.log(`开始标签 -> ${tag}`);
+    if (attrs && attrs.length > 0) {
+      console.log(`标签属性 -> ${JSON.stringify(attrs)}`);
+    }
+    const element = createASTElement(tag, attrs);
+    if (!root) {
+      root = element;
+    }
+    currentParent = element;
+    stack.push(element);
+  }
+
+  function chars(text) {
+    text = text.replace(/\s/g, '');
+    if (text) {
+      console.log(`获取文本 -> ${text}`);
+      currentParent.children.push({
+        type: 3,
+        text,
+      });
+    }
+  }
+
+  function end(tag) {
+    console.log(`结束标签 -> ${tag}`);
+    let element = stack.pop();
+    // 此处应该判断当前传入的标签与出栈的标签是相同的标签
+    currentParent = stack[stack.length - 1];
+    if (currentParent) {
+      element.parent = currentParent;
+      currentParent.children.push(element);
+    }
   }
 
   return root;
