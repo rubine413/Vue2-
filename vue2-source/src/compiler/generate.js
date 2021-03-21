@@ -10,7 +10,7 @@ function genProps(attrs) {
       const obj = {};
       attr.value.split(';').forEach(item => {
         const [key, value] = item.split(':');
-        obj[key] = value;
+        obj[key.trim()] = value;
       });
       attr.value = obj;
     }
@@ -26,6 +26,7 @@ function gen(node) {
     let text = node.text;
     let match, index;
     let tokens = [];
+    console.log('text -> ', text);
     let lastIndex = (defaultTagRE.lastIndex = 0);
     // let
     while ((match = defaultTagRE.exec(text))) {

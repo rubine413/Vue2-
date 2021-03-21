@@ -15,6 +15,8 @@ export function patch(oldVnode, vnode) {
     parentElm.insertBefore(el, oldElem.nextSibling);
 
     parentElm.removeChild(oldElem);
+
+    return el;
   }
 }
 

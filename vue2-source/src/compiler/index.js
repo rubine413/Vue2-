@@ -9,5 +9,7 @@ export function compileToFunction(template) {
   // c("div",{id:app},_c("p",undefined,_v('hello’+_s(name))),_v('hello'))
   console.log('生成ast语法树 -> ', root);
   let code = generate(root);
+
+  // 模板引擎
   return new Function(`with(this){ return ${code}}`);
 }
